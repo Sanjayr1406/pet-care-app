@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup Test</title>
+</head>
+<body>
+
+    <h2>Signup Form (Test)</h2>
+
+    <!-- Signup form -->
+    <form id="signupForm">
+        <input type="text" id="name" placeholder="Name" required /><br><br>
+        <input type="email" id="email" placeholder="Email" required /><br><br>
+        <input type="password" id="password" placeholder="Password" required /><br><br>
+        <button type="submit">Signup</button>
+    </form>
+
+    <p id="response"></p>
+
+    <script>
+        // Listen for form submit
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // prevent page reload
+
+            // Collect form data
+            const data = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+
+            // Send POST request to Flask signup API
+            fetch("http://127.0.0.1:5000/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Show backend response
+                document.getElementById("response").innerText = result.message;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+
+</body>
+</html>
