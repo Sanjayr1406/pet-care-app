@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearby Pet Services</title>
+</head>
+<body>
+
+<h2>Nearby Pet Services</h2>
+
+<!-- Button to open nearby veterinary clinics in Google Maps -->
+<button onclick="openVets()">Find Nearby Veterinary Clinics</button>
+<br><br>
+
+<!-- Button to open nearby pet grooming services in Google Maps -->
+<button onclick="openGrooming()">Find Nearby Pet Grooming Services</button>
+
+<script>
+    // Open Google Maps search for veterinary clinics
+    function openVets() {
+        window.open(
+            "https://www.google.com/maps/search/veterinary+clinic+near+me",
+            "_blank"
+        );
+    }
+
+    // Open Google Maps search for pet grooming services
+    function openGrooming() {
+        window.open(
+            "https://www.google.com/maps/search/pet+grooming+near+me",
+            "_blank"
+        );
+    }
+</script>
+
+</body>
+</html>
