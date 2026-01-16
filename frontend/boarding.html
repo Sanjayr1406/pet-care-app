@@ -2,44 +2,50 @@
 <html>
 <head>
     <title>Boarding Request</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h2>Temporary Boarding Request</h2>
+<div class="container">
+    <h2>Temporary Boarding</h2>
 
-<form id="boardingForm">
-    <input type="number" id="user_id" placeholder="User ID" required /><br><br>
-    <input type="number" id="pet_id" placeholder="Pet ID" required /><br><br>
-    <input type="date" id="start" required /><br><br>
-    <input type="date" id="end" required /><br><br>
-    <button type="submit">Request Boarding</button>
-</form>
+    <form id="boardingForm">
+        <input type="number" id="pet_id" placeholder="Pet ID" required>
+        <input type="date" id="start" required>
+        <input type="date" id="end" required>
+        <button type="submit">Request Boarding</button>
+    </form>
 
-<p id="response"></p>
+    <p id="response"></p>
+
+    <button class="secondary" onclick="goBack()">Back to Dashboard</button>
+</div>
 
 <script>
-    document.getElementById("boardingForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+document.getElementById("boardingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-        // Collect boarding request data
-        const data = {
-            user_id: document.getElementById("user_id").value,
-            pet_id: document.getElementById("pet_id").value,
-            start_date: document.getElementById("start").value,
-            end_date: document.getElementById("end").value
-        };
+    const data = {
+        user_id: localStorage.getItem("user_id"),
+        pet_id: document.getElementById("pet_id").value,
+        start_date: document.getElementById("start").value,
+        end_date: document.getElementById("end").value
+    };
 
-        // Send request to backend
-        fetch("http://127.0.0.1:5000/boarding-request", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(result => {
-            document.getElementById("response").innerText = result.message;
-        });
+    fetch("http://127.0.0.1:5000/boarding-request", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+        document.getElementById("response").innerText = result.message;
     });
+});
+
+function goBack() {
+    window.location.href = "dashboard.html";
+}
 </script>
 
 </body>

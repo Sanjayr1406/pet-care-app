@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup Test</title>
+    <title>Signup</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <h2>Signup Form (Test)</h2>
+<div class="container">
+    <h2>Create Account</h2>
 
-    <!-- Signup form -->
     <form id="signupForm">
-        <input type="text" id="name" placeholder="Name" required /><br><br>
-        <input type="email" id="email" placeholder="Email" required /><br><br>
-        <input type="password" id="password" placeholder="Password" required /><br><br>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
         <button type="submit">Signup</button>
     </form>
 
-    <p id="response"></p>
+    <p class="footer-text">
+    Already have an account? <a href="login.html">Login</a>
+</p>
 
-    <script>
-        // Listen for form submit
-        document.getElementById("signupForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // prevent page reload
+</div>
 
-            // Collect form data
-            const data = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                password: document.getElementById("password").value
-            };
+<script>
+document.getElementById("signupForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-            // Send POST request to Flask signup API
-            fetch("http://127.0.0.1:5000/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                // Show backend response
-                document.getElementById("response").innerText = result.message;
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        });
-    </script>
+    // Correctly read values from input fields
+    const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    fetch("http://127.0.0.1:5000/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.status === "success") {
+            alert("Signup successful!");
+            window.location.href = "login.html";
+        } else {
+            document.getElementById("response").innerText = result.message;
+        }
+    });
+});
+
+</script>
 
 </body>
 </html>

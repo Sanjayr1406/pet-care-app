@@ -2,42 +2,49 @@
 <html>
 <head>
     <title>Add Reminder</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h2>Add Vaccination Reminder</h2>
+<div class="container">
+    <h2>Add Vaccination Reminder</h2>
 
-<form id="reminderForm">
-    <input type="number" id="pet_id" placeholder="Pet ID" required /><br><br>
-    <input type="text" id="vaccine" placeholder="Vaccine Name" required /><br><br>
-    <input type="date" id="date" required /><br><br>
-    <button type="submit">Add Reminder</button>
-</form>
+    <form id="reminderForm">
+        <input type="number" id="pet_id" placeholder="Pet ID" required>
+        <input type="text" id="vaccine" placeholder="Vaccine Name" required>
+        <input type="date" id="date" required>
+        <button type="submit">Add Reminder</button>
+    </form>
 
-<p id="response"></p>
+    <p id="response"></p>
+
+    <button class="secondary" onclick="goBack()">Back to Dashboard</button>
+</div>
 
 <script>
-    document.getElementById("reminderForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+document.getElementById("reminderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-        // Collect reminder data
-        const data = {
-            pet_id: document.getElementById("pet_id").value,
-            vaccine_name: document.getElementById("vaccine").value,
-            due_date: document.getElementById("date").value
-        };
+    const data = {
+        pet_id: document.getElementById("pet_id").value,
+        vaccine_name: document.getElementById("vaccine").value,
+        due_date: document.getElementById("date").value
+    };
 
-        // Send POST request to backend
-        fetch("http://127.0.0.1:5000/add-reminder", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(result => {
-            document.getElementById("response").innerText = result.message;
-        });
+    fetch("http://127.0.0.1:5000/add-reminder", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+        document.getElementById("response").innerText = result.message;
     });
+});
+
+function goBack() {
+    window.location.href = "dashboard.html";
+}
 </script>
 
 </body>

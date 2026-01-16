@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Dashboard</h2>
+    <p id="welcome"></p>
+
+    <button class="nav-btn" onclick="goTo('add_pet.html')">Add Pet</button>
+    <button class="nav-btn" onclick="goTo('add_reminder.html')">Add Reminder</button>
+    <button class="nav-btn" onclick="goTo('boarding.html')">Boarding Request</button>
+    <button class="nav-btn" onclick="goTo('vet_services.html')">Nearby Vet Services</button>
+
+    <button class="secondary" onclick="logout()">Logout</button>
+</div>
+
+<script>
+welcome.innerText = "Welcome, " + localStorage.getItem("user_name");
+
+function goTo(page) {
+    window.location.href = page;
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Nearby Pet Services</title>
+    <title>Nearby Services</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h2>Nearby Pet Services</h2>
+<div class="container">
+    <h2>Nearby Pet Services</h2>
 
-<!-- Button to open nearby veterinary clinics in Google Maps -->
-<button onclick="openVets()">Find Nearby Veterinary Clinics</button>
-<br><br>
-
-<!-- Button to open nearby pet grooming services in Google Maps -->
-<button onclick="openGrooming()">Find Nearby Pet Grooming Services</button>
+    <div class="btn-group">
+        <button onclick="openVets()">Veterinary Clinics</button>
+        <button onclick="openGrooming()">Pet Grooming Centers</button>
+        <button class="secondary" onclick="goBack()">Back to Dashboard</button>
+    </div>
+</div>
 
 <script>
-    // Open Google Maps search for veterinary clinics
-    function openVets() {
-        window.open(
-            "https://www.google.com/maps/search/veterinary+clinic+near+me",
-            "_blank"
-        );
-    }
+function openVets() {
+    window.open("https://www.google.com/maps/search/veterinary+clinic+near+me", "_blank");
+}
 
-    // Open Google Maps search for pet grooming services
-    function openGrooming() {
-        window.open(
-            "https://www.google.com/maps/search/pet+grooming+near+me",
-            "_blank"
-        );
-    }
+function openGrooming() {
+    window.open("https://www.google.com/maps/search/pet+grooming+near+me", "_blank");
+}
+
+function goBack() {
+    window.location.href = "dashboard.html";
+}
 </script>
 
 </body>

@@ -284,6 +284,95 @@ def view_reminders(pet_id):
             "status": "error",
             "message": str(e)
         }), 500
+# --------------------------------
+# ADD BOARDING REQUEST API
+# --------------------------------
+@app.route("/boarding-request", methods=["POST"])
+def boarding_request():
+    # Get JSON data from request
+    data = request.get_json()
+
+    # Extract request details
+    user_id = data.get("user_id")
+    pet_id = data.get("pet_id")
+    start_date = data.get("start_date")  # YYYY-MM-DD
+    end_date = data.get("end_date")      # YYYY-MM-DD
+
+    # Validate input
+    if not user_id or not pet_id or not start_date or not end_date:
+        return jsonify({
+            "status": "error",
+            "message": "All fields are required"
+        }), 400
+
+    try:
+        # Create DB connection
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        # Insert boarding request
+        cursor.execute(
+            """
+            INSERT INTO boarding_requests (user_id, pet_id, start_date, end_date)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (user_id, pet_id, start_date, end_date)
+        )
+
+        # Save changes
+        db.commit()
+
+        # Close DB connection
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "message": "Boarding request submitted"
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+# --------------------------------
+# VIEW BOARDING REQUESTS FOR USER
+# --------------------------------
+@app.route("/boarding/<int:user_id>", methods=["GET"])
+def view_boarding_requests(user_id):
+    try:
+        # Create DB connection
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+
+        # Fetch boarding requests for user
+        cursor.execute(
+            """
+            SELECT br.id, br.start_date, br.end_date, br.status, p.name AS pet_name
+            FROM boarding_requests br
+            JOIN pets p ON br.pet_id = p.id
+            WHERE br.user_id = %s
+            """,
+            (user_id,)
+        )
+
+        requests = cursor.fetchall()
+
+        # Close DB connection
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "requests": requests
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 # Run Flask app
 if __name__ == "__main__":
