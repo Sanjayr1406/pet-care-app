@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boarding Request</title>
+</head>
+<body>
+
+<h2>Temporary Boarding Request</h2>
+
+<form id="boardingForm">
+    <input type="number" id="user_id" placeholder="User ID" required /><br><br>
+    <input type="number" id="pet_id" placeholder="Pet ID" required /><br><br>
+    <input type="date" id="start" required /><br><br>
+    <input type="date" id="end" required /><br><br>
+    <button type="submit">Request Boarding</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+    document.getElementById("boardingForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // Collect boarding request data
+        const data = {
+            user_id: document.getElementById("user_id").value,
+            pet_id: document.getElementById("pet_id").value,
+            start_date: document.getElementById("start").value,
+            end_date: document.getElementById("end").value
+        };
+
+        // Send request to backend
+        fetch("http://127.0.0.1:5000/boarding-request", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(result => {
+            document.getElementById("response").innerText = result.message;
+        });
+    });
+</script>
+
+</body>
+</html>
