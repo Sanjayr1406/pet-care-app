@@ -154,7 +154,136 @@ def login():
             "message": str(e)
         }), 500
 
+# --------------------------------
+# ADD PET API
+# --------------------------------
+@app.route("/add-pet", methods=["POST"])
+def add_pet():
+    # Get JSON data from request
+    data = request.get_json()
 
+    # Extract pet details
+    user_id = data.get("user_id")   # logged-in user id
+    name = data.get("name")
+    age = data.get("age")
+    breed = data.get("breed")
+
+    # Validate input
+    if not user_id or not name or not age or not breed:
+        return jsonify({
+            "status": "error",
+            "message": "All fields are required"
+        }), 400
+
+    try:
+        # Create DB connection
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        # Insert pet into pets table
+        cursor.execute(
+            "INSERT INTO pets (user_id, name, age, breed) VALUES (%s, %s, %s, %s)",
+            (user_id, name, age, breed)
+        )
+
+        # Save changes
+        db.commit()
+
+        # Close connection
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "message": "Pet added successfully"
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+# --------------------------------
+# ADD REMINDER API
+# --------------------------------
+@app.route("/add-reminder", methods=["POST"])
+def add_reminder():
+    # Get JSON data from request
+    data = request.get_json()
+
+    # Extract reminder details
+    pet_id = data.get("pet_id")
+    vaccine_name = data.get("vaccine_name")
+    due_date = data.get("due_date")  # format: YYYY-MM-DD
+
+    # Validate input
+    if not pet_id or not vaccine_name or not due_date:
+        return jsonify({
+            "status": "error",
+            "message": "All fields are required"
+        }), 400
+
+    try:
+        # Create DB connection
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        # Insert reminder into database
+        cursor.execute(
+            "INSERT INTO reminders (pet_id, vaccine_name, due_date) VALUES (%s, %s, %s)",
+            (pet_id, vaccine_name, due_date)
+        )
+
+        # Save changes
+        db.commit()
+
+        # Close DB connection
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "message": "Reminder added successfully"
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+# --------------------------------
+# VIEW REMINDERS FOR A PET
+# --------------------------------
+@app.route("/reminders/<int:pet_id>", methods=["GET"])
+def view_reminders(pet_id):
+    try:
+        # Create DB connection
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+
+        # Fetch reminders for the pet
+        cursor.execute(
+            "SELECT vaccine_name, due_date FROM reminders WHERE pet_id = %s",
+            (pet_id,)
+        )
+
+        reminders = cursor.fetchall()
+
+        # Close DB connection
+        cursor.close()
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "reminders": reminders
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 # Run Flask app
 if __name__ == "__main__":
