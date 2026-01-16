@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Pet</title>
+</head>
+<body>
+
+<h2>Add Pet</h2>
+
+<form id="petForm">
+    <input type="number" id="user_id" placeholder="User ID" required /><br><br>
+    <input type="text" id="name" placeholder="Pet Name" required /><br><br>
+    <input type="number" id="age" placeholder="Pet Age" required /><br><br>
+    <input type="text" id="breed" placeholder="Breed" required /><br><br>
+    <button type="submit">Add Pet</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+    document.getElementById("petForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = {
+            user_id: document.getElementById("user_id").value,
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+            breed: document.getElementById("breed").value
+        };
+
+        fetch("http://127.0.0.1:5000/add-pet", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(result => {
+            document.getElementById("response").innerText = result.message;
+        });
+    });
+</script>
+
+</body>
+</html>
